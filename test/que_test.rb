@@ -40,8 +40,20 @@ class QueTest < Minitest::Test
   end
 
   def test_print_method
-      attendees = [ Attendees.new({
-      id:"3",
+      attendee_1 = Attendees.new({
+      id:"1",
+      regdate:"11/13/08 16:40",
+      first_name:"Eli",
+      last_name:"Zielke",
+      email_address:"jbrabeth.buckley@jumpstartlab.com",
+      homephone:"(858)-405-3000",
+      street:"3024 Cranbrook Ct",
+      city:"La Jolla",
+      state:"CA",
+      zipcode:"92037"
+      })
+      attendee_2 = Attendees.new({
+      id:"2",
       regdate:"11/12/08 13:30",
       first_name:"Sarah",
       last_name:"Xx",
@@ -51,23 +63,15 @@ class QueTest < Minitest::Test
       city:"Saint Petersburg",
       state:"FL",
       zipcode:"33703"
-      }),
-       Attendees.new({
-      id:"3",
-      regdate:"11/12/08 13:30",
-      first_name:"Sarah",
-      last_name:"Xx",
-      email_address:"lqrm4462@jumpstartlab.com",
-      homephone:"(941)979-2000",
-      street:"4175 3rd Street North",
-      city:"Saint Petersburg",
-      state:"FL",
-      zipcode:"33703"
-      }) ]
+      })
+      header = "LAST NAME  FIRST NAME  EMAIL  ZIPCODE  CITY  STATE  ADDRESS  PHONE  DISTRICT
+                --------------------------------------------------------------------------------"
+      attendees = [attendee_1, attendee_2]
       @que.load(attendees)
+      # @que.load(attendee_2)
       # binding.pry
-    result = "LAST NAME  FIRST NAME  EMAIL  ZIPCODE  CITY  STATE  ADDRESS  PHONE  DISTRICT"
-    assert_equal result, @que.print(attendees)
+      assert_equal header + "Zielke\tEli\tjbrabeth.buckley@jumpstartlab.com\t92037\tLa Jolla\tCA\t3024 Cranbrook Ct\t(858)-405-3000\t", "Xx\tSarah\tlqrm4462@jumpstartlab.com\t33703\tSaint Petersburg\tFL\t4175 3rd Street North\t(941)979-2000\t", @que.print(attendees)
+
     # binding.pry
   end
 
