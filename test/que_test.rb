@@ -40,6 +40,7 @@ class QueTest < Minitest::Test
   end
 
   def test_print_method
+
       attendee_1 = Attendees.new({
       id:"1",
       regdate:"11/13/08 16:40",
@@ -64,20 +65,34 @@ class QueTest < Minitest::Test
       state:"FL",
       zipcode:"33703"
       })
-      header = "LAST NAME  FIRST NAME  EMAIL  ZIPCODE  CITY  STATE  ADDRESS  PHONE  DISTRICT
-                --------------------------------------------------------------------------------"
-      attendees = [attendee_1, attendee_2]
+      header = "LAST NAME  FIRST NAME  EMAIL  ZIPCODE  CITY  STATE  ADDRESS  PHONE  DISTRICT" + "\n" +
+                "--------------------------------------------------------------------------------"
+      # attendee = "Zielke\tEli\tjbrabeth.buckley@jumpstartlab.com\t92037\tLa Jolla\tCA\t3024 Cranbrook Ct\t(858)-405-3000\t",
+      # "Xx\tSarah\tlqrm4462@jumpstartlab.com\t33703\tSaint Petersburg\tFL\t4175 3rd Street North\t(941)979-2000\t"
+      attendees = [attendee_1, attendee_2].join(",")
       @que.load(attendees)
-      # @que.load(attendee_2)
-      # binding.pry
-      assert_equal header + "Zielke\tEli\tjbrabeth.buckley@jumpstartlab.com\t92037\tLa Jolla\tCA\t3024 Cranbrook Ct\t(858)-405-3000\t", "Xx\tSarah\tlqrm4462@jumpstartlab.com\t33703\tSaint Petersburg\tFL\t4175 3rd Street North\t(941)979-2000\t", @que.print(attendees)
 
-    # binding.pry
+      binding.pry
+      assert_equal attendees, @que.print(attendees)
+
   end
 
   def test_print_by_attribute
     skip
-    assert_equal ZIPCODE, @que.print_by_attribute
+    attendee_1 = Attendees.new({
+    id:"1",
+    regdate:"11/13/08 16:40",
+    first_name:"Eli",
+    last_name:"Zielke",
+    email_address:"jbrabeth.buckley@jumpstartlab.com",
+    homephone:"(858)-405-3000",
+    street:"3024 Cranbrook Ct",
+    city:"La Jolla",
+    state:"CA",
+    zipcode:"92037"
+    })
+
+    assert_equal "92037", @que.print_by_attribute
   end
 
   def test_save_to_file_method
