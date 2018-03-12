@@ -18,6 +18,14 @@ class Que
     @current_records = @fileIO.records
   end
 
+  def find(attribute, criteria)
+    @results = @current_records.select do |attendee|
+      if attendee.respond_to?(attribute.to_sym)
+        attendee.send(attribute.to_sym) == criteria
+      end
+    end
+  end
+
   def count
     results.length
   end
@@ -25,15 +33,8 @@ class Que
   def clear
     results.clear
   end
+end
 
-  def find(attribute, criteria)
-    @results = @current_records.select do |attendee|
-      if attendee.respond_to?(attribute.to_sym)
-        attendee.send(attribute.to_sym) == criteria
-      end
-
-    end
-  end
 
   # def print_data(results)
   #   # binding.pry
@@ -53,7 +54,6 @@ class Que
   #   end.join(" ")
   #   puts printed.to_a
   # end
-end
 #
 # new_que = Que.new
 # results = new_que.load

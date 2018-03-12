@@ -16,10 +16,24 @@ class QueTest < Minitest::Test
     assert_equal [], @que.results
   end
 
-  def test_help_commands
-    skip
-    result = help_commands
-    assert_equal result, @que.help
+  def test_it_can_find_attributes
+
+    attendee = Attendees.new({
+      id:"1",
+      regdate:"11/13/08 16:40",
+      first_name:"Eli",
+      last_name:"Zielke",
+      email_address:"jbrabeth.buckley@jumpstartlab.com",
+      homephone:"(858)-405-3000",
+      street:"3024 Cranbrook Ct",
+      city:"La Jolla",
+      state:"CA",
+      zipcode: "92037"
+      })
+      @que.current_records << attendee
+
+
+      assert_equal [attendee], @que.find("zipcode", "92037")
   end
 
   def test_count_method
@@ -30,13 +44,6 @@ class QueTest < Minitest::Test
   def test_clear_method
 
     assert_equal [], @que.clear
-  end
-
-  def test_district_method
-    skip
-    #if @que has < 10 need to default to Sunlight API
-    result = Sunlight API
-    assert_equal result, @que.district
   end
 
   def test_it_can_print
@@ -72,24 +79,6 @@ class QueTest < Minitest::Test
     data = [attendee_1, attendee_2]
     @que.load
     assert_equal data, new_que.print_data(data)
-  end
-  def test_it_can_find_attributes
-    attendee = Attendees.new({
-    id:"1",
-    regdate:"11/13/08 16:40",
-    first_name:"Eli",
-    last_name:"Zielke",
-    email_address:"jbrabeth.buckley@jumpstartlab.com",
-    homephone:"(858)-405-3000",
-    street:"3024 Cranbrook Ct",
-    city:"La Jolla",
-    state:"CA",
-    zipcode: "92037"
-    })
-    @que.current_records << attendee
-
-
-    assert_equal [attendee], @que.find("zipcode", "92037")
   end
 
   def test_print_by_attribute
