@@ -1,19 +1,21 @@
 require './lib/attendees'
+require './lib/file_io'
 require 'csv'
 require 'pry'
 
 class Que
-  attr_reader :results
+  attr_reader :results, :current_records, :fileIO
 
-  def initialize(file_name = 'small_sample.csv')
+
+  def initialize
     @results = []
-    @contents = CSV.open file_name, headers: true, header_converters: :symbol
+    @current_records = []
   end
 
-  def load
-    @results = @contents.map do |row|
-      Attendees.new(row).formatted_attendee
-    end
+  def load(filename='small_sample.csv')
+    @fileIO = FileIO.new(filename)
+    @fileIO.load
+    @current_records = @fileIO.records
   end
 
   def count
@@ -24,26 +26,37 @@ class Que
     results.clear
   end
 
-  def print_data(results)
-    # binding.pry
-    puts "LAST NAME  FIRST NAME  EMAIL  ZIPCODE  CITY  STATE  ADDRESS  PHONE  DISTRICT"
-    puts "-" * 80 + "\n"
+  def find(attribute, criteria)
+    @results = @current_records.select do |attendee|
+      if attendee.respond_to?(attribute.to_sym)
+        attendee.send(attribute.to_sym) == criteria
+      end
 
-    printed = results.map do |attendee|
-      attendee[:last_name] + "\t" +
-      attendee[:first_name] + "\t" +
-      attendee[:email_address] + "\t" +
-      attendee[:zipcode].to_s + "\t" +
-      attendee[:city] + "\t" +
-      attendee[:state] + "\t" +
-      attendee[:street] + "\t" +
-      attendee[:homephone] + "\n"
-    end.join(" ")
-    puts printed
-    # binding.pry
+    end
   end
-end
 
-new_que = Que.new
-results = new_que.load
-new_que.print_data(results)
+  # def print_data(results)
+  #   # binding.pry
+  #   puts "LAST NAME  FIRST NAME  EMAIL  ZIPCODE  CITY  STATE  ADDRESS  PHONE  DISTRICT"
+  #   puts "-" * 80 + "\n"
+  #
+  #   # binding.pry
+  #   printed = results.map do |attendee|
+  #     @attendee[last_name] + "\t" +
+  #     @attendee[first_name] + "\t" +
+  #     @attendee[email_address] + "\t" +
+  #     @attendee[zipcode].to_s + "\t" +
+  #     @attendee[city] + "\t" +
+  #     @attendee[state] + "\t" +
+  #     @attendee[street] + "\t" +
+  #     @attendee[homephone] + "\n"
+  #   end.join(" ")
+  #   puts printed.to_a
+  # end
+end
+#
+# new_que = Que.new
+# results = new_que.load
+# #user information => symbol instead of string.
+# # sorted_results = results.sort_by { |r| r[user_given_key] }
+# new_que.print_data(results)
